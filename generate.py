@@ -1,3 +1,122 @@
+"""
+.cur file structure
+
+Notes:
+- basically an .ico file but there is not .png support
+  - images are stored in .bmp without the BITMAPHEADER
+- numbers are stored in little endian
+
+1) ICONDIR
+Offset  Size  Name        Description
+-------------------------------------
+     0     2  idReserved  Always 0
+     2     2  idType      Always 2 (1 specifies .ico files)
+     4     2  idCount     Number of images in the file
+
+2) ICONDIRENTRY * idCount
+Offset  Size  Name           Description
+----------------------------------------
+     0     1  bWidth         Image width (0 becomes 256)
+     1     1  bHeight        Image height (0 becomes 256)
+     2     1  bColorCount    Number of colors in palette (0 if not used and if >= 8bpp)
+     3     1  bReserved      Always 0
+     4     2  wPlanes        Cursor hotspot X (pixels from the left)
+     6     2  wBitCount      Cursor hotspot Y (pixels from the top)
+     8     4  dwBytesInRes   Number of bytes in the pixel data
+    12     4  dwImageOffset  Offset from the beginning of the file of the pixel data
+
+3) Image pixel data in BMP format
+Name      Description
+---------------------
+icHeader  DIB header
+icColors  Image colors in BGRA format
+icXOR     Empty
+icAND     Bit mask: 1 = transparent pixel, 0 = use color
+
+3.1) BITMAPINFOHEADER
+Offset  Size  Name             Descritpion
+------------------------------------------
+     0     4  biSize           Header size (= 40)
+     4     4  biWidth          Image width in pixels
+     8     4  biHeight         Image height in pixels * 2
+    12     2  biPlanes         = 1
+    14     2  biBitCount       = 32
+    16     4  biCompression    Not used, = 0
+    20     4  biSizeImage      Image size in bytes (size of icColors + icAND)
+    24     4  biXPelsPerMeter  Not used, = 0
+    28     4  biYPelsPerMeter  Not used, = 0
+    32     4  biClrUsed        Not used, = 0
+    36     4  biClrImportant   Not used, = 0
+
+.ani file structure
+
+Notes:
+- a RIFF file with many icons inside, each icon is a frame
+  - these are normal icons: .png's are supported
+- numbers are stored in little endian
+
+Definitions:
+- SEQUENCE = 0x2 // Flag which allows for a sequence of indices to be used (allows frames to be used multiple times)
+
+1) RIFF chunk header
+Offset  Size  Name       Description
+------------------------------------
+     0     4  id         Chunk id (= 'RIFF')
+     4     4  chunkSize  Size of the chunk (except id and chunkSize = fileSize - 8)
+     8     4  dataForm   Type of data contained (= 'ACON')
+
+2) anih chunk
+Offset  Size  Name       Description
+------------------------------------
+     0     4  id         Chunk id (= 'anih')
+     4     4  chunkSize  Size of the chunk (except id and chunkSize = 36)
+     8    36  aniHeader  Ani header
+
+2.1) Ani header
+Offset  Size  Name       Description
+------------------------------------
+     0     4  cbSizeof   Size of the header (= 36)
+     4     4  cFrames    Number of frames in the list
+     8     4  cSteps     Number of frames in the animation (the same as cFrames if not SEQUENCE is not set)
+    12     4  cx         Not used, = 0
+    16     4  cy         Not used, = 0
+    20     4  cBitCount  Not used, = 0
+    24     4  cPlanes    Not used, = 0
+    28     4  jifRate    Default display rate in 1/60s (jiffies)
+    32     4  flags      1's bit always set, optionally SEQUENCE
+
+3) 'rate' and 'seq ' chunks when SEQUENCE is set
+
+3.1) 'rate' chunk
+Offset       Size  Name       Description
+-----------------------------------------
+     0          4  id         Chunk id (= 'rate')
+     4          4  chunkSize  Size of the chunk (cFrames * 4)
+     8  4*cFrames  rates      An array of jiffies for each image
+
+3.2) 'seq ' chunk
+Offset      Size  Name       Description
+----------------------------------------
+     0         4  id         Chunk id (= 'seq ', notice the space)
+     4         4  chunkSize  Size of the chunk (cFrames * 4)
+     8  4*cSteps  indices    An array of image indices to indicate what image to display on each frame
+
+4) LIST chunk of frames
+Offset  Size  Name       Description
+------------------------------------
+     0     4  id         Chunk id (= 'LIST')
+     4     4  chunkSize  Size of the chunk (except id and chunkSize)
+     8     4  listType   Type of the list (= 'fram')
+    12     ?  iconData   Images of the animation (.ico files)
+
+5) iconData
+
+Like in .cur files this will contain a ICONDIR and multiple ICONDIRENTRY's.
+The pixel data can either be in BMP format or in PNG format.
+"""
+
+# TODO: add support for .ani cursors
+
 import os
 import os.path
 import shutil
@@ -15,7 +134,7 @@ def u8(x: int) -> bytes: return x.to_bytes(1, "little")
 
 class CursorGenerator:
     """
-    CUR file generator, generates a cursor file from an SVG.
+    CUR and ANI file generator, generates a cursor file from an SVG.
 
     The hotspot of the cursor is the top-left corner of the drawing by default.
     It can be changed by adding an object with the ID 'hotspot'. If such an
@@ -67,52 +186,6 @@ class CursorGenerator:
                 raise RuntimeError(f"GenGeneration of {out_file} failedd")
 
     def __gen_cur(self):
-        """
-        File structure (numbers are store in little endian)
-
-        1) ICONDIR
-        Offset  Size  Name        Description
-        -------------------------------------
-             0     2  idReserved  Always 0
-             2     2  idType      Always 2 (1 specifies .ico files)
-             4     2  idCount     Number of images in the file
-
-        2) ICONDIRENTRY * idCount
-        Offset  Size  Name           Description
-        ----------------------------------------
-             0     1  bWidth         Image width (0 becomes 256)
-             1     1  bHeight        Image height (0 becomes 256)
-             2     1  bColorCount    Number of colors in palette (0 if not used and if >= 8bpp)
-             3     1  bReserved      Always 0
-             4     2  wPlanes        Cursor hotspot X (pixels from the left)
-             6     2  wBitCount      Cursor hotspot Y (pixels from the top)
-             8     4  dwBytesInRes   Number of bytes in the pixel data
-            12     4  dwImageOffset  Offset from the beginning of the file of the pixel data
-
-        3) Image pixel data in BMP format
-        Name      Description
-        ---------------------
-        icHeader  DIB header
-        icColors  Image colors in BGRA format
-        icXOR     Empty
-        icAND     Bit mask: 1 = transparent pixel, 0 = use color
-
-        3.1) BITMAPINFOHEADER
-        Offset  Size  Name             Descritpion
-        ------------------------------------------
-             0     4  biSize           Header size (= 40)
-             4     4  biWidth          Image width in pixels
-             8     4  biHeight         Image height in pixels * 2
-            12     2  biPlanes         = 1
-            14     2  biBitCount       = 32
-            16     4  biCompression    Unused, = 0
-            20     4  biSizeImage      Image size in bytes (size of icColors + icAND)
-            24     4  biXPelsPerMeter  Unused, = 0
-            28     4  biYPelsPerMeter  Unused, = 0
-            32     4  biClrUsed        Unused, = 0
-            36     4  biClrImportant   Unused, = 0
-        """
-
         print(f"Generating {self.name} CUR...")
         icondir = bytearray()
         icondir.extend((0).to_bytes(2, "little"))
