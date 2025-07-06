@@ -164,6 +164,7 @@ class CursorGenerator:
 
         for res in self.res:
             out_file = os.path.join(self.png_out_dir, f"{res}.png")
+            # Only generate the file if the SVG is newer than the PNG
             if os.path.exists(out_file) and os.path.getmtime(out_file) > src_file_mtime:
                 print(f"    Skipped {out_file}")
                 continue
@@ -172,8 +173,8 @@ class CursorGenerator:
             result = subprocess.run([
                 "inkscape",
                 self.src_svg,
-                "--export-area-page",
-                "--export-overwrite",
+                "--export-area-page",  # Export the whole page
+                "--export-overwrite",  # Overwrite any existing image
                 f"--export-filename={out_file}",
                 f"--export-width={res}",
                 f"--export-height={res}",
@@ -187,6 +188,13 @@ class CursorGenerator:
 
     def __gen_cur(self):
         print(f"Generating {self.name} CUR...")
+        src_file_mtime = os.path.getmtime(self.src_svg)
+        out_file = os.path.join(self.cur_out_dir, f"{self.name}.cur")
+        # Only generate the file if the SVG is newer than the CUR
+        if os.path.exists(out_file) and os.path.getmtime(out_file) > src_file_mtime:
+            print(f"    Skipped {out_file}")
+            return
+
         icondir = bytearray()
         icondir.extend((0).to_bytes(2, "little"))
         icondir.extend((2).to_bytes(2, "little"))
@@ -199,11 +207,12 @@ class CursorGenerator:
 
         entries = []
         ENTRY_SIZE = 16
+        min_offset = len(icondir) + ENTRY_SIZE*len(self.res)
         x, y = self.__get_hotspot()
         for i, res in enumerate(self.res):
             hotspotX = int(res * x)
             hotspotY = int(res * y)
-            image_offset = len(icondir) + ENTRY_SIZE * len(self.res) + sum(map(len, images[:i]))
+            image_offset = min_offset + sum(map(len, images[:i]))
             entry = bytearray()
             entry.extend(u8(res))              # bWidth
             entry.extend(u8(res))              # bHeight
@@ -217,7 +226,7 @@ class CursorGenerator:
 
         os.makedirs(self.cur_out_dir, exist_ok=True)
 
-        with open(os.path.join(self.cur_out_dir, f"{self.name}.cur"), "wb") as cur:
+        with open(out_file, "wb") as cur:
             cur.write(icondir)
             for entry in entries:
                 cur.write(entry)
@@ -279,7 +288,8 @@ class CursorGenerator:
 
         return image_data
 
-    def __get_hotspot(self) -> tuple[int, int]:
+    def __get_hotspot(self) -> tuple[float, float]:
+        """Get the hotspot where (0, 0) is top left and (1, 1) is bottom right"""
         svg_tree = xml.parse(self.src_svg).getroot()
         width = int(svg_tree.attrib["width"])
         height = int(svg_tree.attrib["height"])
@@ -287,8 +297,8 @@ class CursorGenerator:
         result = subprocess.run([
             "inkscape",
             self.src_svg,
-            "--query-id=hotspot",
-            "-X", "-Y"
+            "--query-id=hotspot",  # If the object does not exist query the position of the drawing
+            "-X", "-Y"  # Query x and y of the object
         ], capture_output=True)
         if result.returncode != 0:
             raise RuntimeError(f"Failed to query hotspot of {self.src_svg}")
