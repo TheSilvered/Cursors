@@ -59,7 +59,7 @@
       <feGaussianBlur
          result="blur"
          in="SourceGraphic"
-         stdDeviation="14"
+         stdDeviation="14.000000"
          id="feGaussianBlur1" />
       <feOffset
          result="offset"
