@@ -122,7 +122,7 @@ import os.path
 import shutil
 import subprocess
 import xml.etree.ElementTree as xml
-from typing import Iterable
+from typing import Collection
 from PIL import Image
 
 # Utility functions
@@ -144,7 +144,7 @@ class CursorGenerator:
     The intermediate PNGs are store in 'png_out_dir/[cursor-name]/',
     named '[resolution].png'.
     """
-    def __init__(self, src_svg: str, png_out_dir: str, cur_out_dir: str, res: Iterable[int] = (32, 48, 64)):
+    def __init__(self, src_svg: str, png_out_dir: str, cur_out_dir: str, res: Collection[int] = (32, 48, 64)):
         if src_svg[-4:] != ".svg":
             raise TypeError("expected an SVG image")
         if not os.path.exists(src_svg):
@@ -181,7 +181,7 @@ class CursorGenerator:
             ], capture_output=True)
             if result.returncode != 0:
                 exc = RuntimeError(f"Generation of {out_file} failed")
-                exc.add_node(result.stderr.decode())
+                exc.add_note(result.stderr.decode())
                 raise exc
             if not os.path.exists(out_file):
                 raise RuntimeError(f"GenGeneration of {out_file} failedd")
@@ -267,7 +267,9 @@ class CursorGenerator:
         mask = ""
         for y in range(res - 1, -1, -1):
             for x in range(res):
-                r, g, b, a = image.getpixel((x, y))
+                pixel = image.getpixel((x, y))
+                assert type(pixel) is tuple[int, int, int, int]
+                r, g, b, a = pixel
                 if a == 0:
                     r = g = b = 0
                     mask += "1"
@@ -305,7 +307,7 @@ class CursorGenerator:
         try:
             x, y = map(float, result.stdout.decode().split("\n", maxsplit=1))
         except Exception as e:
-            e.add_node(f"Failed to query hotspot of {self.src_svg}")
+            e.add_note(f"Failed to query hotspot of {self.src_svg}")
             raise e
 
         x /= width
