@@ -23,8 +23,7 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#323232"
      showborder="false"
-     borderlayer="false"
-     showgrid="true">
+     borderlayer="false">
     <inkscape:grid
        id="pixel_grid"
        units="px"
@@ -47,10 +46,10 @@
        style="color-interpolation-filters:sRGB;"
        inkscape:label="Drop Shadow"
        id="filter1"
-       x="-0.095999593"
-       y="-0.052118803"
-       width="1.1919992"
-       height="1.1150957">
+       x="-0.33556089"
+       y="-0.18217819"
+       width="1.6711218"
+       height="1.3752145">
       <feFlood
          result="flood"
          in="SourceGraphic"
@@ -60,7 +59,7 @@
       <feGaussianBlur
          result="blur"
          in="SourceGraphic"
-         stdDeviation="4.000000"
+         stdDeviation="14"
          id="feGaussianBlur1" />
       <feOffset
          result="offset"
