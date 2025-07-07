@@ -268,7 +268,7 @@ class CursorGenerator:
         for y in range(res - 1, -1, -1):
             for x in range(res):
                 pixel = image.getpixel((x, y))
-                assert type(pixel) is tuple[int, int, int, int]
+                assert type(pixel) is tuple
                 r, g, b, a = pixel
                 if a == 0:
                     r = g = b = 0
