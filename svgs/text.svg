@@ -47,10 +47,10 @@
        style="color-interpolation-filters:sRGB;"
        inkscape:label="Drop Shadow"
        id="filter1"
-       x="-0.62137857"
-       y="-0.28997666"
-       width="2.2427571"
-       height="1.5932867">
+       x="-0.62285714"
+       y="-0.29066667"
+       width="2.2457143"
+       height="1.628">
       <feFlood
          result="flood"
          in="SourceGraphic"
@@ -66,7 +66,7 @@
          result="offset"
          in="blur"
          dx="0.000000"
-         dy="2.000000"
+         dy="7.000000"
          id="feOffset1" />
       <feComposite
          result="comp1"
