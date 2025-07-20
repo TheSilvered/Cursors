@@ -9,7 +9,7 @@ Custom cursors I made.
   - [x] alternate
   - [x] cross
   - [x] hand
-  - [ ] help
+  - [x] help
   - [ ] move
   - [x] pen
   - [ ] person
