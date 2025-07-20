@@ -97,12 +97,13 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="beam"
-     inkscape:label="beam">
+     id="body_layer"
+     inkscape:label="body_layer">
     <path
        d="m 90,90 v 10 c 16.56854,0 30,6.71573 30,15 v 45 h -10 v 10 h 10 v 45 c 0,8.28427 -13.43146,15 -30,15 v 10 c 17.17607,0 29.17449,-5.79859 35,-12.34961 C 130.83208,234.20879 142.83649,240 160,240 v -10 c -16.56854,0 -30,-6.71573 -30,-15 v -45 h 10 v -10 h -10 v -45 c 0,-8.28427 13.43146,-15 30,-15 V 90 c -17.17605,0 -29.17448,5.798577 -35,12.34961 C 119.16792,95.791206 107.16351,90 90,90 Z"
        style="fill:#ffffff;stroke:#000000;stroke-width:20;stroke-linecap:round;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;paint-order:markers stroke fill;filter:url(#filter1)"
-       id="path11"
+       id="body"
+       inkscape:label="body"
        sodipodi:nodetypes="ccccccccccccccccccccccc" />
   </g>
 </svg>

@@ -97,12 +97,12 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="body"
-     inkscape:label="body">
+     id="body_layer"
+     inkscape:label="body_layer">
     <path
        style="fill:#000000;stroke:#ffffff;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;paint-order:markers stroke fill;filter:url(#filter1)"
        d="M 80,240 90,210 215.9997,84.000299 a 14.142558,14.142558 0 0 1 20.0006,0 14.142136,14.142136 90.001711 0 1 -6e-4,20.000001 L 110,230 Z"
-       id="path1"
+       id="body"
        inkscape:label="body"
        sodipodi:nodetypes="cccccc" />
     <path

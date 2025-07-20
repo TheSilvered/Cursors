@@ -96,8 +96,8 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="body"
-     inkscape:label="body">
+     id="body_layer"
+     inkscape:label="body_layer">
     <path
        id="body_outline"
        style="fill:#ffffff;filter:url(#filter1)"

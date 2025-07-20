@@ -55,4 +55,9 @@
        x="80"
        y="80" />
   </g>
+  <g
+     inkscape:groupmode="layer"
+     id="body_layer"
+     inkscape:label="body_layer">
+   </g>
 </svg>

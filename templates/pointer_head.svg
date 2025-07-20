@@ -59,8 +59,8 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="body"
-     inkscape:label="body">
+     id="body_layer"
+     inkscape:label="body_layer">
     <path
        style="fill:#ffffff"
        d="m 80,40 v 125.85859 a 14.141836,14.141836 22.5 0 0 24.14162,9.99979 L 130,150 h 35.85859 a 14.141836,14.141836 112.5 0 0 9.99979,-24.14162 L 87.071068,37.071068 A 4.1421356,4.1421356 157.5 0 0 80,40 Z"
