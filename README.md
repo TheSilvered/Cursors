@@ -12,7 +12,7 @@ Custom cursors I made.
   - [x] help
   - [ ] move
   - [x] pen
-  - [ ] person
+  - [x] person
   - [x] pin
   - [x] pointer
   - [ ] resizeew
