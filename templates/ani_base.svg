@@ -74,14 +74,14 @@
       </tspan>
      </text>
   </g>
+  <g
+     inkscape:groupmode="layer"
+     id="body_layer"
+     inkscape:label="body_layer">
     <g
        inkscape:groupmode="layer"
        id="static"
-       inkscape:label="static">
-    <g
-       inkscape:groupmode="layer"
-       id="frame_1"
-       inkscape:label="frame_1" />
+       inkscape:label="static" />
     <g
        inkscape:groupmode="layer"
        id="frame_1"
