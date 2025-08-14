@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="320"
+   height="320"
+   viewBox="0 0 320 320"
+   version="1.1"
+   id="base"
+   sodipodi:docname="ani_base.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#808080"
+     bordercolor="#000000"
+     borderopacity="0"
+     inkscape:showpageshadow="false"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#323232"
+     showborder="false"
+     borderlayer="false"
+     showgrid="true">
+    <inkscape:grid
+       id="pixel_grid"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="10"
+       spacingy="10"
+       empcolor="#0000ff"
+       empopacity="0.30196078"
+       color="#0000ff"
+       opacity="0.14901961"
+       empspacing="4"
+       enabled="true"
+       visible="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:groupmode="layer"
+     id="hotspot_layer"
+     inkscape:label="hotspot_layer">
+    <rect
+       style="fill:#000000"
+       id="hotspot"
+       width="10"
+       height="10"
+       x="80"
+       y="80" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="ani_config_layer"
+     inkscape:label="ani_config_layer">
+    <text
+       xml:space="preserve"
+       x="0"
+       y="0"
+       id="ani_config"
+       inkscape:label="ani_config">
+      <tspan
+   sodipodi:role="line"
+   id="tspan1"
+   x="0"
+   y="0">
+        frames=30;time=1
+      </tspan>
+     </text>
+  </g>
+    <g
+       inkscape:groupmode="layer"
+       id="static"
+       inkscape:label="static">
+    <g
+       inkscape:groupmode="layer"
+       id="frame_1"
+       inkscape:label="frame_1" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_1"
+       inkscape:label="frame_1" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_2"
+       inkscape:label="frame_2" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_3"
+       inkscape:label="frame_3" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_4"
+       inkscape:label="frame_4" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_5"
+       inkscape:label="frame_5" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_6"
+       inkscape:label="frame_6" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_7"
+       inkscape:label="frame_7" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_8"
+       inkscape:label="frame_8" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_9"
+       inkscape:label="frame_9" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_10"
+       inkscape:label="frame_10" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_11"
+       inkscape:label="frame_11" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_12"
+       inkscape:label="frame_12" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_13"
+       inkscape:label="frame_13" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_14"
+       inkscape:label="frame_14" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_15"
+       inkscape:label="frame_15" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_16"
+       inkscape:label="frame_16" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_17"
+       inkscape:label="frame_17" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_18"
+       inkscape:label="frame_18" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_19"
+       inkscape:label="frame_19" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_20"
+       inkscape:label="frame_20" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_21"
+       inkscape:label="frame_21" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_22"
+       inkscape:label="frame_22" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_23"
+       inkscape:label="frame_23" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_24"
+       inkscape:label="frame_24" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_25"
+       inkscape:label="frame_25" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_26"
+       inkscape:label="frame_26" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_27"
+       inkscape:label="frame_27" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_28"
+       inkscape:label="frame_28" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_29"
+       inkscape:label="frame_29" />
+    <g
+       inkscape:groupmode="layer"
+       id="frame_30"
+       inkscape:label="frame_30" />
+  </g>
+</svg>
