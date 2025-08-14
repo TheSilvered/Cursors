@@ -155,6 +155,7 @@ class CursorGenerator:
         self.png_out_dir = os.path.join(png_out_dir, self.name)
         self.cur_out_dir = cur_out_dir
         self.res = res
+        self.is_animated = src_svg[-8:] == ".ani.svg"
 
     def __gen_pngs(self):
         print(f"Generating {self.name} PNGs...")
@@ -162,29 +163,39 @@ class CursorGenerator:
 
         os.makedirs(self.png_out_dir, exist_ok=True)
 
+        actions = []
+        out_files = []
+
         for res in self.res:
             out_file = os.path.join(self.png_out_dir, f"{res}.png")
             # Only generate the file if the SVG is newer than the PNG
             if os.path.exists(out_file) and os.path.getmtime(out_file) > src_file_mtime:
                 print(f"    Skipped {out_file}")
                 continue
-            print(f"   Generating {out_file}...")
+            actions.extend([
+                f"export-filename:{out_file}",
+                f"export-width:{res}",
+                f"export-height:{res}",
+                "export-area-page",
+                "export-do"
+            ])
+            out_files.append(out_file)
 
-            result = subprocess.run([
-                "inkscape",
-                self.src_svg,
-                "--export-area-page",  # Export the whole page
-                "--export-overwrite",  # Overwrite any existing image
-                f"--export-filename={out_file}",
-                f"--export-width={res}",
-                f"--export-height={res}",
-            ], capture_output=True)
-            if result.returncode != 0:
-                exc = RuntimeError(f"Generation of {out_file} failed")
-                exc.add_note(result.stderr.decode())
-                raise exc
-            if not os.path.exists(out_file):
-                raise RuntimeError(f"GenGeneration of {out_file} failedd")
+        if len(out_files) == 0:
+            return
+
+        print(f"    Generating {', '.join(out_files)}...")
+        result = subprocess.run([
+            "inkscape",
+            "--without-gui",
+            self.src_svg,
+            '--actions=' + ";".join(actions)
+        ], capture_output=True)
+        if result.returncode != 0 or not all(map(os.path.exists, out_files)):
+            exc = RuntimeError(f"Generation of {', '.join(out_files)} failed")
+            exc.add_note("Stderr: " + result.stderr.decode())
+            exc.add_note("Stdout: " + result.stdout.decode())
+            raise exc
 
     def __gen_cur(self):
         print(f"Generating {self.name} CUR...")
