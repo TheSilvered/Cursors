@@ -136,13 +136,31 @@ class CursorGenerator:
     """
     CUR and ANI file generator, generates a cursor file from an SVG.
 
-    The hotspot of the cursor is the top-left corner of the drawing by default.
-    It can be changed by adding an object with the ID 'hotspot'. If such an
-    object exists the hotspot will be at its top-left corner instead.
+    The hotspot of the cursor is (0, 0) by default. It can be changed by adding
+    a rect with the ID 'hotspot' at the root of the SVG.
+
+    By default a static cursor is generated. To generate an animated one add a
+    text object at the root of the SVG with the ID 'ani_config' which contains
+    the following options:
+
+    - `frameCount: int`: the total number of unique frames in the file
+    - `frameRate: int` (optional): the display rate of the animation in 1/60 of
+      a second, by default it is 1
+    - `frameList: list[int]` (optional): a comma separated list of frame
+      indices to use instead of the sequencial ordering of the frames
+    - `rateList: list[int]` (optional): a comma separated list of frame rates
+      to use instead of `frameRate`
+
+    Ani config example: `frameCount=3;frameRate=2;frameList=1,2,3,2`
+
+    Each frame is a layer with the id `frame_[index]` with `index` starting from
+    `1`.
+
+    An optional `static` layer can be added to animated files that will always
+    be exported.
 
     Needs Inkscape. The name of the cursor is taken from the source file.
-    The intermediate PNGs are store in 'png_out_dir/[cursor-name]/',
-    named '[resolution].png'.
+    The intermediate PNGs are store in 'png_out_dir'.
     """
     def __init__(self, src_svg: str, png_out_dir: str, cur_out_dir: str, res: Collection[int] = (32, 48, 64)):
         if src_svg[-4:] != ".svg":
@@ -306,20 +324,31 @@ class CursorGenerator:
         svg_tree = xml.parse(self.src_svg).getroot()
         width = int(svg_tree.attrib["width"])
         height = int(svg_tree.attrib["height"])
-        del svg_tree
-        result = subprocess.run([
-            "inkscape",
-            self.src_svg,
-            "--query-id=hotspot",  # If the object does not exist query the position of the drawing
-            "-X", "-Y"  # Query x and y of the object
-        ], capture_output=True)
-        if result.returncode != 0:
-            raise RuntimeError(f"Failed to query hotspot of {self.src_svg}")
-        try:
-            x, y = map(float, result.stdout.decode().split("\n", maxsplit=1))
-        except Exception as e:
-            e.add_note(f"Failed to query hotspot of {self.src_svg}")
-            raise e
+
+        x_attrib = None
+        y_attrib = None
+
+        for element in svg_tree:
+            print(element.tag)
+            if element.get('id') == 'hotspot' and element.tag.endswith('rect'):
+                x_attrib = element.get('x')
+                y_attrib = element.get('y')
+
+        if x_attrib is None:
+            x = 0
+        else:
+            try:
+                x = int(x_attrib)
+            except (ValueError, TypeError):
+                x = 0
+
+        if y_attrib is None:
+            y = 0
+        else:
+            try:
+                y = int(y_attrib)
+            except (ValueError, TypeError):
+                y = 0
 
         x /= width
         y /= height

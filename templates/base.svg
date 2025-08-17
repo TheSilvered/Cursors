@@ -43,18 +43,13 @@
   </sodipodi:namedview>
   <defs
      id="defs1" />
-  <g
-     inkscape:groupmode="layer"
-     id="hotspot_layer"
-     inkscape:label="hotspot_layer">
-    <rect
-       style="fill:#000000"
-       id="hotspot"
-       width="10"
-       height="10"
-       x="80"
-       y="80" />
-  </g>
+  <rect
+     style="display:none"
+     id="hotspot"
+     width="10"
+     height="10"
+     x="80"
+     y="80" />
   <g
      inkscape:groupmode="layer"
      id="body_layer"

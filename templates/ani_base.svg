@@ -24,7 +24,16 @@
      inkscape:deskcolor="#323232"
      showborder="false"
      borderlayer="false"
-     showgrid="true">
+     showgrid="true"
+     inkscape:zoom="2.521875"
+     inkscape:cx="159.80173"
+     inkscape:cy="160"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="base">
     <inkscape:grid
        id="pixel_grid"
        units="px"
@@ -43,37 +52,21 @@
   </sodipodi:namedview>
   <defs
      id="defs1" />
-  <g
-     inkscape:groupmode="layer"
-     id="hotspot_layer"
-     inkscape:label="hotspot_layer">
-    <rect
-       style="fill:#000000"
-       id="hotspot"
-       width="10"
-       height="10"
-       x="80"
-       y="80" />
-  </g>
-  <g
-     inkscape:groupmode="layer"
-     id="ani_config_layer"
-     inkscape:label="ani_config_layer">
-    <text
-       xml:space="preserve"
-       x="0"
-       y="0"
-       id="ani_config"
-       inkscape:label="ani_config">
-      <tspan
-   sodipodi:role="line"
-   id="tspan1"
-   x="0"
-   y="0">
-        frames=30;time=1
-      </tspan>
-     </text>
-  </g>
+  <rect
+     style="display:none"
+     id="hotspot"
+     width="10"
+     height="10"
+     x="80"
+     y="80" />
+  <text
+     style="display:none"
+     x="0"
+     y="0"
+     id="ani_config"
+     inkscape:label="ani_config">
+    frameCount=30
+  </text>
   <g
      inkscape:groupmode="layer"
      id="body_layer"

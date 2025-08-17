@@ -81,19 +81,13 @@
          id="feComposite2" />
     </filter>
   </defs>
-  <g
-     inkscape:groupmode="layer"
-     id="hotspot_layer"
-     inkscape:label="hotspot_layer"
-     style="display:none">
-    <rect
-       style="fill:#000000"
-       id="hotspot"
-       width="10"
-       height="10"
-       x="80"
-       y="40" />
-  </g>
+  <rect
+     style="display:none"
+     id="hotspot"
+     width="10"
+     height="10"
+     x="80"
+     y="40" />
   <g
      inkscape:groupmode="layer"
      id="body_layer"
