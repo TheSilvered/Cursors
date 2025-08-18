@@ -117,13 +117,12 @@ The pixel data can either be in BMP format or in PNG format.
 
 # TODO: add support for .ani cursors
 
+import asyncio
 import os
 import os.path
 import shutil
-import subprocess
-import xml.etree.ElementTree as xml
 from typing import Collection
-from PIL import Image
+import xml.etree.ElementTree as xml
 
 # Utility functions
 def u32(x: int) -> bytes: return x.to_bytes(4, "little")
@@ -131,6 +130,14 @@ def i32(x: int) -> bytes: return x.to_bytes(4, "little", signed=True)
 def u16(x: int) -> bytes: return x.to_bytes(2, "little")
 def u8(x: int) -> bytes: return x.to_bytes(1, "little")
 
+def gray(s: str) -> str: return "\x1b[90m" + s + "\x1b[0m"
+def red(s: str) -> str: return "\x1b[91m" + s + "\x1b[0m"
+
+try:
+    from PIL import Image
+except ImportError as e:
+    e.add_note(red("The 'pillow' package must be installed."))
+    raise e
 
 class CursorGenerator:
     """
@@ -175,8 +182,7 @@ class CursorGenerator:
         self.res = res
         self.is_animated = src_svg[-8:] == ".ani.svg"
 
-    def __gen_pngs(self):
-        print(f"Generating {self.name} PNGs...")
+    async def __gen_pngs(self):
         src_file_mtime = os.path.getmtime(self.src_svg)
 
         os.makedirs(self.png_out_dir, exist_ok=True)
@@ -188,7 +194,7 @@ class CursorGenerator:
             out_file = os.path.join(self.png_out_dir, f"{res}.png")
             # Only generate the file if the SVG is newer than the PNG
             if os.path.exists(out_file) and os.path.getmtime(out_file) > src_file_mtime:
-                print(f"    Skipped {out_file}")
+                print(gray(f"Skipped {out_file}"))
                 continue
             actions.extend([
                 f"export-filename:{out_file}",
@@ -202,27 +208,32 @@ class CursorGenerator:
         if len(out_files) == 0:
             return
 
-        print(f"    Generating {', '.join(out_files)}...")
-        result = subprocess.run([
+        print(f"Generating {', '.join(out_files)}...")
+
+        process = await asyncio.create_subprocess_exec(
             "inkscape",
-            "--without-gui",
             self.src_svg,
-            '--actions=' + ";".join(actions)
-        ], capture_output=True)
-        if result.returncode != 0 or not all(map(os.path.exists, out_files)):
+            "--actions=" + ";".join(actions),
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        stdout, stderr = await process.communicate()
+
+        if process.returncode != 0 or not all(map(os.path.exists, out_files)):
             exc = RuntimeError(f"Generation of {', '.join(out_files)} failed")
-            exc.add_note("Stderr: " + result.stderr.decode())
-            exc.add_note("Stdout: " + result.stdout.decode())
+            exc.add_note("Stderr: " + stderr.decode().strip())
+            exc.add_note("Stdout: " + stdout.decode().strip())
             raise exc
 
     def __gen_cur(self):
-        print(f"Generating {self.name} CUR...")
         src_file_mtime = os.path.getmtime(self.src_svg)
         out_file = os.path.join(self.cur_out_dir, f"{self.name}.cur")
         # Only generate the file if the SVG is newer than the CUR
         if os.path.exists(out_file) and os.path.getmtime(out_file) > src_file_mtime:
-            print(f"    Skipped {out_file}")
+            print(gray(f"Skipped {out_file}"))
             return
+
+        print(f"Generating {out_file}...")
 
         icondir = bytearray()
         icondir.extend((0).to_bytes(2, "little"))
@@ -329,7 +340,6 @@ class CursorGenerator:
         y_attrib = None
 
         for element in svg_tree:
-            print(element.tag)
             if element.get('id') == 'hotspot' and element.tag.endswith('rect'):
                 x_attrib = element.get('x')
                 y_attrib = element.get('y')
@@ -355,19 +365,27 @@ class CursorGenerator:
 
         return min(max(x, 0), 1), min(max(y, 0), 1)
 
-    def generate(self):
-        self.__gen_pngs()
+    async def generate(self):
+        await self.__gen_pngs()
         self.__gen_cur()
 
 
-def main():
+async def main():
     if shutil.which("inkscape") is None:
-        print("Inkscape is required to use generate.py")
+        print(red("Inkscape is required to use 'generate.py'"))
+        exit(1)
 
+    tasks = []
     for file in os.listdir("svgs"):
-        generator = CursorGenerator(os.path.abspath(os.path.join("svgs", file)), "pngs", "cursors", res=(32, 48, 64))
-        generator.generate()
+        generator = CursorGenerator(
+            os.path.abspath(os.path.join("svgs", file)),
+            "pngs",
+            "cursors",
+            res=(32, 48, 64)
+        )
+        tasks.append(generator.generate())
+    await asyncio.gather(*tasks)
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

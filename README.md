@@ -2,7 +2,10 @@
 
 Custom cursors I made.
 
-## To Do
+## Generating
 
-- Rename `filter1` and `filter2` to `drop_shadow` and `glyph_shadow`
-- Make animated cursors
+Currently only Windows is supported. `python` is required.
+
+```sh
+python generate.py
+```
