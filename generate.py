@@ -113,10 +113,14 @@ Offset  Size  Name       Description
 
 Like in .cur files this will contain a ICONDIR and multiple ICONDIRENTRY's.
 The pixel data can either be in BMP format or in PNG format.
+
+Each image is an 'icon' block
+
 """
 
 import asyncio
 from dataclasses import dataclass
+from io import BytesIO
 import os
 import os.path
 import shutil
@@ -298,7 +302,7 @@ class Cursor:
             self.__warning("'frameRate' cannot be zero")
             final_cfg["frameRate"] = 1
 
-        expected_rate_len = len(final_cfg["frameList"]) if "frameList" in final_cfg else final_cfg["frameCount"]
+        expected_rate_len = final_cfg["frameCount"]
         if "rateList" in final_cfg:
             rate_list: list[int] = final_cfg["rateList"]
             zero_rate = False
@@ -485,18 +489,18 @@ class CursorGenerator:
 
         return True
 
-    def __gen_cur(self):
-        print(f"Generating {self.cur_file}...")
+    def __gen_ico_bytes(self, images: list[Image.Image]) -> bytes:
+        assert len(images) == len(self.resolutions)
 
         icondir = bytearray()
-        icondir.extend((0).to_bytes(2, "little"))
-        icondir.extend((2).to_bytes(2, "little"))
-        icondir.extend(len(self.resolutions).to_bytes(2, "little"))
+        icondir.extend(u16(0))
+        icondir.extend(u16(2))
+        icondir.extend(u16(len(self.resolutions)))
 
-        images = []
-        for res in self.resolutions:
-            png = os.path.join(self.png_out_dir, f"{res}.png")
-            images.append(self.__gen_bitmap(png, res))
+        image_bytes = []
+        for image, res in zip(images, self.resolutions):
+            image_bytes.append(self.__gen_bitmap(image, res))
+
 
         entries = []
         ENTRY_SIZE = 16
@@ -505,30 +509,29 @@ class CursorGenerator:
         for i, res in enumerate(self.resolutions):
             hotspotX = int(res * self.src.hotspot.x)
             hotspotY = int(res * self.src.hotspot.y)
-            image_offset = min_offset + sum(map(len, images[:i]))
+            image_offset = min_offset + sum(map(len, image_bytes[:i]))
             entry = bytearray()
-            entry.extend(u8(res))              # bWidth
-            entry.extend(u8(res))              # bHeight
-            entry.extend(u8(0))                # bColorCount
-            entry.extend(u8(0))                # bReserved
-            entry.extend(u16(hotspotX))        # wPlanes (hotspotX)
-            entry.extend(u16(hotspotY))        # wBitCount (hotspotY)
-            entry.extend(u32(len(images[i])))  # dwBytesInRes
-            entry.extend(u32(image_offset))    # dwImageOffset
+            entry.extend(u8(res))                   # bWidth
+            entry.extend(u8(res))                   # bHeight
+            entry.extend(u8(0))                     # bColorCount
+            entry.extend(u8(0))                     # bReserved
+            entry.extend(u16(hotspotX))             # wPlanes (hotspotX)
+            entry.extend(u16(hotspotY))             # wBitCount (hotspotY)
+            entry.extend(u32(len(image_bytes[i])))  # dwBytesInRes
+            entry.extend(u32(image_offset))         # dwImageOffset
             entries.append(entry)
 
-        os.makedirs(self.cur_out_dir, exist_ok=True)
+        ico_file = bytearray()
+        ico_file.extend(icondir)
+        for entry in entries:
+            ico_file.extend(entry)
+        for img in image_bytes:
+            ico_file.extend(img)
 
-        with open(self.cur_file, "wb") as cur:
-            cur.write(icondir)
-            for entry in entries:
-                cur.write(entry)
-            for image in images:
-                cur.write(image)
+        return ico_file
 
     @staticmethod
-    def __gen_bitmap(img_path: str, res: int) -> bytearray:
-        image = Image.open(img_path)
+    def __gen_bitmap(image: Image.Image, res: int) -> bytearray:
         image = image.convert("RGBA")
         assert image.width == res and image.height == res
 
@@ -583,6 +586,123 @@ class CursorGenerator:
 
         return image_data
 
+    def __gen_cur(self):
+        print(f"Generating {self.cur_file}...")
+
+        images = []
+        for res in self.resolutions:
+            img_path = os.path.join(self.png_out_dir, f"{res}.png")
+            images.append(Image.open(img_path))
+
+        with open(self.cur_file, "wb") as cur:
+            cur.write(self.__gen_ico_bytes(images))
+
+    def __gen_ani(self):
+        assert self.src.ani_cfg is not None
+
+        print(f"Generating {self.cur_file}...")
+
+        riff_block = bytearray()
+        riff_block.extend("RIFF".encode("ascii"))
+
+        anih_block = bytearray()
+        anih_block.extend("anih".encode("ascii"))  # id
+        anih_block.extend(u32(36))                 # chunkSize
+
+        if self.src.ani_cfg.frame_list is None:
+            steps = self.src.ani_cfg.frame_count
+        else:
+            steps = len(self.src.ani_cfg.frame_list)
+
+        if self.src.ani_cfg.frame_list is not None or self.src.ani_cfg.rate_list is not None:
+            flags = 1 | 2
+        else:
+            flags = 1
+
+        # aniHeader
+        anih_block.extend(u32(36))                            # cbSizeof
+        anih_block.extend(u32(self.src.ani_cfg.frame_count))  # cFrames
+        anih_block.extend(u32(steps))                         # cSteps
+        anih_block.extend(u32(0))                             # cx
+        anih_block.extend(u32(0))                             # cy
+        anih_block.extend(u32(0))                             # cBitCount
+        anih_block.extend(u32(0))                             # cPlanes
+        anih_block.extend(u32(self.src.ani_cfg.frame_rate))   # jifRate
+        anih_block.extend(u32(flags))                         # flags
+
+        rate_block = bytearray()
+        seq_block = bytearray()
+
+        if flags != 1:
+            rate_block.extend("rate".encode("ascii"))
+            rate_block.extend(u32(self.src.ani_cfg.frame_count * 4))
+
+            if self.src.ani_cfg.rate_list is not None:
+                for rate in self.src.ani_cfg.rate_list:
+                    rate_block.extend(u32(rate))
+            else:
+                rate = self.src.ani_cfg.frame_rate
+                for _ in range(self.src.ani_cfg.frame_count):
+                    rate_block.extend(u32(rate))
+
+            seq_block.extend("seq ".encode("ascii"))
+            seq_block.extend(u32(steps * 4))
+            if self.src.ani_cfg.frame_list is not None:
+                for idx in self.src.ani_cfg.frame_list:
+                    seq_block.extend(u32(idx))
+            else:
+                for i in range(steps):
+                    rate_block.extend(u32(i))
+
+        frame_list = bytearray()
+        frame_list.extend("LIST".encode("ascii"))
+
+        frames: list[bytes] = []
+
+        for i in range(self.src.ani_cfg.frame_count):
+            images = []
+            for res in self.resolutions:
+                frame_image_path = os.path.join(self.png_out_dir, f"{res}/{i}.png")
+                static_image_path = os.path.join(self.png_out_dir, f"{res}/static.png")
+                frame_image = Image.open(frame_image_path)
+                if os.path.isfile(static_image_path):
+                    static_image = Image.open(static_image_path)
+                    composite = Image.new("RGBA", (res, res))
+                    composite.paste(static_image)
+                    composite.paste(frame_image, mask=frame_image)
+                    frame_image = composite
+                images.append(frame_image)
+
+            image_bytes = self.__gen_ico_bytes(images)
+            frame_block = bytearray()
+            frame_block.extend("icon".encode("ascii"))
+            frame_block.extend(u32(len(image_bytes)))
+            frame_block.extend(image_bytes)
+            frames.append(frame_block)
+
+        frame_list.extend(u32(4 + sum(map(len, frames))))
+        frame_list.extend("fram".encode("ascii"))
+        for frame in frames:
+            frame_list.extend(frame)
+
+        riff_block_size = (
+            4
+            + len(anih_block)
+            + len(seq_block)
+            + len(rate_block)
+            + len(frame_list)
+        )
+
+        riff_block.extend(u32(riff_block_size))
+        riff_block.extend("ACON".encode("ascii"))
+        riff_block.extend(anih_block)
+        riff_block.extend(rate_block)
+        riff_block.extend(seq_block)
+        riff_block.extend(frame_list)
+
+        with open(self.cur_file, "wb") as cur:
+            cur.write(riff_block)
+
     async def generate(self):
         src_file_mtime = os.path.getmtime(self.src.path)
         # Only generate the file if the SVG is newer than the CUR
@@ -591,7 +711,7 @@ class CursorGenerator:
 
         if self.src.is_ani():
             if await self.__gen_ani_pngs():
-                print(yellow("TODO"))
+                self.__gen_ani()
         else:
             if await self.__gen_pngs():
                 self.__gen_cur()
