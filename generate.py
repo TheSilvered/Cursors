@@ -115,8 +115,6 @@ Like in .cur files this will contain a ICONDIR and multiple ICONDIRENTRY's.
 The pixel data can either be in BMP format or in PNG format.
 """
 
-# TODO: add support for .ani cursors
-
 import asyncio
 from dataclasses import dataclass
 import os
@@ -138,7 +136,7 @@ def yellow(s: str) -> str: return "\x1b[33m" + s + "\x1b[0m"
 try:
     from PIL import Image
 except ImportError as e:
-    e.add_note(red("The 'pillow' package must be installed."))
+    e.add_note(red("Package 'pillow' is required."))
     raise e
 
 
@@ -267,13 +265,13 @@ class Cursor:
         for opt_name, str_value in str_cfg.items():
             if opt_name in ("frameCount", "frameRate"):
                 try:
-                    value = map(self.__parse_int, str_value.removesuffix(",").split(","))
+                    value = self.__parse_int(str_value)
                 except ValueError:
                     self.__warning(f"invalid value '{str_value}' for option '{opt_name}'")
                     continue
             elif opt_name in ("frameList", "rateList"):
                 try:
-                    value = self.__parse_int(str_value)
+                    value = [self.__parse_int(n) for n in str_value.removesuffix(",").split(",")]
                 except ValueError:
                     self.__warning(f"invalid value '{str_value}' for option '{opt_name}'")
                     continue
@@ -287,6 +285,8 @@ class Cursor:
 
         if "frameCount" not in final_cfg:
             self.__error(f"missing required option 'frameCount'")
+        if final_cfg["frameCount"] == 0:
+            self.__error(f"'frameCount' cannot be zero")
 
         if "frameList" in final_cfg:
             frame_list = final_cfg["frameList"]
@@ -367,11 +367,86 @@ class CursorGenerator:
         self.src = src
         self.png_out_dir = os.path.join(png_out_dir, self.src.name)
         self.cur_out_dir = cur_out_dir
+        if self.src.is_ani():
+            self.cur_file = os.path.join(self.cur_out_dir, f"{self.src.name}.ani")
+        else:
+            self.cur_file = os.path.join(self.cur_out_dir, f"{self.src.name}.cur")
+
         self.resolutions = resolutions
 
-    async def __gen_pngs(self) -> bool:
-        src_file_mtime = os.path.getmtime(self.src.path)
+    async def __gen_ani_pngs(self) -> bool:
+        assert self.src.ani_cfg is not None
 
+        process = await asyncio.create_subprocess_exec(
+            "inkscape",
+            self.src.path,
+            "--query-id=static",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        _, stderr = await process.communicate()
+
+        has_static_layer = len(stderr.decode().strip()) == 0
+
+        actions = []
+        out_files = []
+
+        for res in self.resolutions:
+            out_file_dir = os.path.join(self.png_out_dir, f"{res}")
+            os.makedirs(out_file_dir, exist_ok=True)
+            out_files.append(out_file_dir + f"[1..{self.src.ani_cfg.frame_count}].png")
+
+            if has_static_layer:
+                out_file = os.path.join(out_file_dir, f"static.png")
+                actions.extend([
+                    f"export-filename:{out_file}",
+                    f"export-width:{res}",
+                    f"export-height:{res}",
+                    f'export-id:static',
+                    "export-id-only",
+                    "export-area-page",
+                    "export-do"
+                ])
+
+            for i in range(self.src.ani_cfg.frame_count):
+                out_file = os.path.join(out_file_dir, f"{i}.png")
+                actions.extend([
+                    f"export-filename:{out_file}",
+                    f"export-width:{res}",
+                    f"export-height:{res}",
+                    f'export-id:frame_{i + 1}',
+                    "export-id-only",
+                    "export-area-page",
+                    "export-do"
+                ])
+
+        if len(out_files) == 0:
+            return True
+
+        print(f"Generating {', '.join(out_files)}...")
+
+        process = await asyncio.create_subprocess_exec(
+            "inkscape",
+            self.src.path,
+            "--actions=" + ";".join(actions),
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        stdout, stderr = await process.communicate()
+
+        if process.returncode != 0:
+            print(red(f"Generation of {', '.join(out_files)} failed"))
+            stderr_str = stderr.decode().strip()
+            stdout_str = stdout.decode().strip()
+            if stderr_str:
+                print(gray("stderr: " + stderr_str))
+            if stdout_str:
+                print(gray("stdout: " + stdout_str))
+            return False
+
+        return True
+
+    async def __gen_pngs(self) -> bool:
         os.makedirs(self.png_out_dir, exist_ok=True)
 
         actions = []
@@ -379,10 +454,6 @@ class CursorGenerator:
 
         for res in self.resolutions:
             out_file = os.path.join(self.png_out_dir, f"{res}.png")
-            # Only generate the file if the SVG is newer than the PNG
-            if os.path.exists(out_file) and os.path.getmtime(out_file) > src_file_mtime:
-                print(gray(f"Skipped {out_file}"))
-                continue
             actions.extend([
                 f"export-filename:{out_file}",
                 f"export-width:{res}",
@@ -415,14 +486,7 @@ class CursorGenerator:
         return True
 
     def __gen_cur(self):
-        src_file_mtime = os.path.getmtime(self.src.path)
-        out_file = os.path.join(self.cur_out_dir, f"{self.src.name}.cur")
-        # Only generate the file if the SVG is newer than the CUR
-        if os.path.exists(out_file) and os.path.getmtime(out_file) > src_file_mtime:
-            print(gray(f"Skipped {out_file}"))
-            return
-
-        print(f"Generating {out_file}...")
+        print(f"Generating {self.cur_file}...")
 
         icondir = bytearray()
         icondir.extend((0).to_bytes(2, "little"))
@@ -455,7 +519,7 @@ class CursorGenerator:
 
         os.makedirs(self.cur_out_dir, exist_ok=True)
 
-        with open(out_file, "wb") as cur:
+        with open(self.cur_file, "wb") as cur:
             cur.write(icondir)
             for entry in entries:
                 cur.write(entry)
@@ -520,8 +584,17 @@ class CursorGenerator:
         return image_data
 
     async def generate(self):
-        if (await self.__gen_pngs()):
-            self.__gen_cur()
+        src_file_mtime = os.path.getmtime(self.src.path)
+        # Only generate the file if the SVG is newer than the CUR
+        if os.path.exists(self.cur_file) and os.path.getmtime(self.cur_file) > src_file_mtime:
+            return
+
+        if self.src.is_ani():
+            if await self.__gen_ani_pngs():
+                print(yellow("TODO"))
+        else:
+            if await self.__gen_pngs():
+                self.__gen_cur()
 
 
 async def main():
