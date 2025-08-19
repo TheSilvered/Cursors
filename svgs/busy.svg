@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="320"
+   height="320"
+   viewBox="0 0 320 320"
+   version="1.1"
+   id="base"
+   sodipodi:docname="busy.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#808080"
+     bordercolor="#000000"
+     borderopacity="0"
+     inkscape:showpageshadow="false"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#323232"
+     showborder="false"
+     borderlayer="false"
+     showgrid="true">
+    <inkscape:grid
+       id="pixel_grid"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="10"
+       spacingy="10"
+       empcolor="#0000ff"
+       empopacity="0.30196078"
+       color="#0000ff"
+       opacity="0.14901961"
+       empspacing="4"
+       enabled="true"
+       visible="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter1"
+       x="-0.21"
+       y="-0.21"
+       width="1.42"
+       height="1.46375">
+      <feFlood
+         result="flood"
+         in="SourceGraphic"
+         flood-opacity="0.301961"
+         flood-color="rgb(0,0,0)"
+         id="feFlood1" />
+      <feGaussianBlur
+         result="blur"
+         in="SourceGraphic"
+         stdDeviation="14.000000"
+         id="feGaussianBlur1" />
+      <feOffset
+         result="offset"
+         in="blur"
+         dx="0.000000"
+         dy="7.000000"
+         id="feOffset1" />
+      <feComposite
+         result="comp1"
+         operator="in"
+         in="flood"
+         in2="offset"
+         id="feComposite1" />
+      <feComposite
+         result="comp2"
+         operator="over"
+         in="SourceGraphic"
+         in2="comp1"
+         id="feComposite2" />
+    </filter>
+  </defs>
+  <rect
+     style="display:none"
+     id="hotspot"
+     width="10"
+     height="10"
+     x="155"
+     y="155" />
+  <text
+     style="display:none"
+     x="0"
+     y="0"
+     id="ani_config"
+     inkscape:label="ani_config">
+    frameCount=30
+  </text>
+  <g
+     inkscape:groupmode="layer"
+     id="body_layer"
+     inkscape:label="body_layer">
+    <g
+       inkscape:groupmode="layer"
+       id="static"
+       inkscape:label="static">
+      <circle
+         style="fill:#ffffff;fill-opacity:1;filter:url(#filter1)"
+         id="path1"
+         cx="160"
+         cy="160"
+         r="80" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_1"
+       inkscape:label="frame_1">
+      <path
+         id="spinner_1"
+         style="fill:#18a7db"
+         d="m 180,110 a 20,20 0 0 1 -20,20 a 30,30 0 0 0 -30,30 a 20,20 0 0 1 -20,20 a 20,20 0 0 1 -20,-20 a 70,70 0 0 1 70,-70 a 20,20 0 0 1 20,20 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_2"
+       inkscape:label="frame_2">
+      <path
+         id="spinner_2"
+         style="fill:#18a7db"
+         d="m 189.95854,115.25085 a 20,20 45 0 1 -23.72119,15.40472 30,30 0 0 0 -35.58178,23.10708 20,20 45 0 1 -23.72118,15.40472 20,20 45 0 1 -15.404722,-23.72119 70,70 0 0 1 83.024152,-53.916512 20,20 45 0 1 15.40472,23.721182 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_3"
+       inkscape:label="frame_3">
+      <path
+         id="spinner_3"
+         style="fill:#18a7db"
+         d="M 198.60775,122.45746 A 20,20 45 0 1 172.2021,132.59363 30,30 0 0 0 132.59363,147.7979 20,20 45 0 1 106.188,157.93408 20,20 45 0 1 96.051819,131.52843 70,70 0 0 1 188.47157,96.05182 a 20,20 45 0 1 10.13618,26.40564 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_4"
+       inkscape:label="frame_4">
+      <path
+         id="spinner_4"
+         style="fill:#18a7db"
+         d="m 205.56961,131.30485 a 20,20 45 0 1 -27.93605,4.42463 30,30 0 0 0 -41.90408,6.63696 20,20 45 0 1 -27.93603,4.42464 20,20 45 0 1 -4.42464,-27.93605 70,70 0 0 1 97.77616,-15.48622 20,20 45 0 1 4.42464,27.93604 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_5"
+       inkscape:label="frame_5">
+      <path
+         id="spinner_5"
+         style="fill:#18a7db"
+         d="m 210.53986,141.40636 a 20,20 45 0 1 -28.24551,-1.48029 30,30 0 0 0 -42.36828,-2.22042 20,20 45 0 1 -28.24549,-1.48028 20,20 45 0 1 1.48028,-28.24551 70,70 0 0 1 98.85928,5.181 20,20 45 0 1 -1.48028,28.2455 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_6"
+       inkscape:label="frame_6">
+      <path
+         id="spinner_6"
+         style="fill:#18a7db"
+         d="M 213.30128,152.3205 A 20,20 45 0 1 185.98077,144.99999 30,30 0 0 0 144.99999,134.01923 20,20 45 0 1 117.6795,126.69874 20,20 45 0 1 125,99.378228 a 70,70 0 0 1 95.62178,25.621782 20,20 45 0 1 -7.3205,27.32049 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_7"
+       inkscape:label="frame_7">
+      <path
+         id="spinner_7"
+         style="fill:#18a7db"
+         d="m 213.73318,163.57027 a 20,20 45 0 1 -25.20147,-12.84079 30,30 0 0 0 -37.80223,-19.26119 20,20 45 0 1 -25.20145,-12.84077 20,20 45 0 1 12.84078,-25.20148 70,70 0 0 1 88.20515,44.94278 20,20 45 0 1 -12.84078,25.20145 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_8"
+       inkscape:label="frame_8">
+      <path
+         id="spinner_8"
+         style="fill:#18a7db"
+         d="M 211.81668,174.664 A 20,20 45 0 1 189.83567,156.86414 30,30 0 0 0 156.86414,130.16432 20,20 45 0 1 134.88315,112.36448 20,20 45 0 1 152.68301,90.383471 70,70 0 0 1 229.61654,152.68302 20,20 45 0 1 211.81668,174.664 Z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_9"
+       inkscape:label="frame_9">
+      <path
+         id="spinner_9"
+         style="fill:#18a7db"
+         d="M 207.63555,185.11685 A 20,20 45 0 1 189.83567,163.13585 30,30 0 0 0 163.13585,130.16432 20,20 45 0 1 145.336,108.18334 20,20 45 0 1 167.317,90.383469 70,70 0 0 1 229.61654,167.317 20,20 45 0 1 207.63555,185.11685 Z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_10"
+       inkscape:label="frame_10">
+      <path
+         id="spinner_10"
+         style="fill:#18a7db"
+         d="M 201.37252,194.47197 A 20,20 45 0 1 188.53171,169.27051 30,30 0 0 0 169.27052,131.46828 20,20 45 0 1 156.42974,106.26684 20,20 45 0 1 181.6312,93.426047 70,70 0 0 1 226.57397,181.6312 20,20 45 0 1 201.37252,194.47197 Z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_11"
+       inkscape:label="frame_11">
+      <path
+         id="spinner_11"
+         style="fill:#18a7db"
+         d="M 193.30131,202.3205 A 20,20 45 0 1 185.98078,175 a 30,30 0 0 0 -10.98076,-40.98078 20,20 45 0 1 -7.3205,-27.32048 20,20 45 0 1 27.32049,-7.320511 70,70 0 0 1 25.62179,95.621781 20,20 45 0 1 -27.32049,7.32049 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_12"
+       inkscape:label="frame_12">
+      <path
+         id="spinner_12"
+         style="fill:#18a7db"
+         d="m 183.77467,208.31942 a 20,20 45 0 1 -1.48029,-28.24551 30,30 0 0 0 -2.22043,-42.36828 20,20 45 0 1 -1.48029,-28.24548 20,20 45 0 1 28.2455,-1.48029 70,70 0 0 1 5.181,98.85928 20,20 45 0 1 -28.24549,1.48028 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_13"
+       inkscape:label="frame_13">
+      <path
+         id="spinner_13"
+         style="fill:#18a7db"
+         d="m 173.20896,212.20655 a 20,20 45 0 1 4.42463,-27.93604 30,30 0 0 0 6.63695,-41.90409 20,20 45 0 1 4.42462,-27.93602 20,20 45 0 1 27.93604,4.42463 70,70 0 0 1 -15.48622,97.77616 20,20 45 0 1 -27.93602,-4.42464 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_14"
+       inkscape:label="frame_14">
+      <path
+         id="spinner_14"
+         style="fill:#18a7db"
+         d="m 162.06595,213.81203 a 20,20 45 0 1 10.13617,-26.40564 30,30 0 0 0 15.20427,-39.60849 20,20 45 0 1 10.13615,-26.40562 20,20 45 0 1 26.40564,10.13617 70,70 0 0 1 -35.47661,92.41975 20,20 45 0 1 -26.40562,-10.13617 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_15"
+       inkscape:label="frame_15">
+      <path
+         id="spinner_15"
+         style="fill:#18a7db"
+         d="m 150.83266,213.06564 a 20,20 45 0 1 15.40471,-23.72118 30,30 0 0 0 23.10709,-35.58181 20,20 45 0 1 15.40468,-23.72117 20,20 45 0 1 23.72119,15.40472 70,70 0 0 1 -53.91651,83.02415 20,20 45 0 1 -23.72116,-15.40471 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_16"
+       inkscape:label="frame_16">
+      <path
+         id="spinner_16"
+         style="fill:#18a7db"
+         d="m 140.00002,210.00003 a 20,20 45 0 1 19.99999,-19.99999 30,30 0 0 0 30.00002,-30.00003 20,20 45 0 1 19.99996,-19.99999 20,20 45 0 1 20,20 70,70 0 0 1 -69.99999,70 20,20 45 0 1 -19.99998,-19.99999 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_17"
+       inkscape:label="frame_17">
+      <path
+         id="spinner_17"
+         style="fill:#18a7db"
+         d="m 130.04148,204.74918 a 20,20 45 0 1 23.72117,-15.40471 30,30 0 0 0 35.58181,-23.1071 20,20 45 0 1 23.72114,-15.40472 20,20 45 0 1 15.40472,23.72119 70,70 0 0 1 -83.02414,53.91651 20,20 45 0 1 -15.4047,-23.72117 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_18"
+       inkscape:label="frame_18">
+      <path
+         id="spinner_18"
+         style="fill:#18a7db"
+         d="m 121.39227,197.54258 a 20,20 45 0 1 26.40562,-10.13617 30,30 0 0 0 39.6085,-15.20428 20,20 45 0 1 26.4056,-10.13619 20,20 45 0 1 10.13618,26.40565 70,70 0 0 1 -92.41974,35.47661 20,20 45 0 1 -10.13616,-26.40562 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_19"
+       inkscape:label="frame_19">
+      <path
+         id="spinner_19"
+         style="fill:#18a7db"
+         d="m 114.4304,188.69519 a 20,20 45 0 1 27.93602,-4.42463 30,30 0 0 0 41.90411,-6.63696 20,20 45 0 1 27.93601,-4.42466 20,20 45 0 1 4.42463,27.93605 70,70 0 0 1 -97.77615,15.48622 20,20 45 0 1 -4.42462,-27.93602 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_20"
+       inkscape:label="frame_20">
+      <path
+         id="spinner_20"
+         style="fill:#18a7db"
+         d="m 109.46014,178.59369 a 20,20 45 0 1 28.24548,1.48028 30,30 0 0 0 42.36831,2.22043 20,20 45 0 1 28.24548,1.48025 20,20 45 0 1 -1.48029,28.24551 70,70 0 0 1 -98.85927,-5.18099 20,20 45 0 1 1.48029,-28.24548 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_21"
+       inkscape:label="frame_21">
+      <path
+         id="spinner_21"
+         style="fill:#18a7db"
+         d="m 106.6987,167.67951 a 20,20 45 0 1 27.32048,7.3205 30,30 0 0 0 40.98081,10.98077 20,20 45 0 1 27.32049,7.32047 20,20 45 0 1 -7.32052,27.32051 70,70 0 0 1 -95.621766,-25.62177 20,20 45 0 1 7.320506,-27.32048 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_22"
+       inkscape:label="frame_22">
+      <path
+         id="spinner_22"
+         style="fill:#18a7db"
+         d="m 106.26679,156.42969 a 20,20 45 0 1 25.20145,12.84077 30,30 0 0 0 37.80225,19.26121 20,20 45 0 1 25.20146,12.84075 20,20 45 0 1 -12.8408,25.20146 70,70 0 0 1 -88.205146,-44.94275 20,20 45 0 1 12.840786,-25.20144 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_23"
+       inkscape:label="frame_23">
+      <path
+         id="spinner_23"
+         style="fill:#18a7db"
+         d="m 108.18328,145.33595 a 20,20 45 0 1 21.98099,17.79984 30,30 0 0 0 32.97155,26.69984 20,20 45 0 1 21.98101,17.79983 20,20 45 0 1 -17.79988,21.98099 70,70 0 0 1 -76.933525,-62.29952 20,20 45 0 1 17.799855,-21.98098 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_24"
+       inkscape:label="frame_24">
+      <path
+         id="spinner_24"
+         style="fill:#18a7db"
+         d="m 112.36441,134.88309 a 20,20 45 0 1 17.79986,21.98098 30,30 0 0 0 26.69983,32.97156 20,20 45 0 1 17.79988,21.98097 20,20 45 0 1 -21.98102,17.79984 70,70 0 0 1 -62.299544,-76.9335 20,20 45 0 1 21.980994,-17.79985 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_25"
+       inkscape:label="frame_25">
+      <path
+         id="spinner_25"
+         style="fill:#18a7db"
+         d="m 118.62744,125.52796 a 20,20 45 0 1 12.84079,25.20144 30,30 0 0 0 19.2612,37.80226 20,20 45 0 1 12.84081,25.20144 20,20 45 0 1 -25.20148,12.84076 70,70 0 0 1 -44.942775,-88.20512 20,20 45 0 1 25.201455,-12.84078 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_26"
+       inkscape:label="frame_26">
+      <path
+         id="spinner_26"
+         style="fill:#18a7db"
+         d="m 126.69865,117.67942 a 20,20 45 0 1 7.32051,27.32048 30,30 0 0 0 10.98077,40.98082 20,20 45 0 1 7.32053,27.32048 20,20 45 0 1 -27.32051,7.32048 70,70 0 0 1 -25.621793,-95.62176 20,20 45 0 1 27.320493,-7.3205 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_27"
+       inkscape:label="frame_27">
+      <path
+         id="spinner_27"
+         style="fill:#18a7db"
+         d="m 136.22529,111.68049 a 20,20 45 0 1 1.48029,28.24548 30,30 0 0 0 2.22042,42.36832 20,20 45 0 1 1.48031,28.24549 20,20 45 0 1 -28.2455,1.48025 70,70 0 0 1 -5.18101,-98.85926 20,20 45 0 1 28.24549,-1.48028 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_28"
+       inkscape:label="frame_28">
+      <path
+         id="spinner_28"
+         style="fill:#18a7db"
+         d="m 146.791,107.79335 a 20,20 45 0 1 -4.42463,27.93602 30,30 0 0 0 -6.63697,41.90412 20,20 45 0 1 -4.4246,27.93603 20,20 45 0 1 -27.93603,-4.42466 70,70 0 0 1 15.4862,-97.77614 20,20 45 0 1 27.93603,4.42463 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_29"
+       inkscape:label="frame_29">
+      <path
+         id="spinner_29"
+         style="fill:#18a7db"
+         d="m 157.934,106.18789 a 20,20 45 0 1 -10.13616,26.40562 30,30 0 0 0 -15.20429,39.60851 20,20 45 0 1 -10.13614,26.40563 20,20 45 0 1 -26.405625,-10.1362 70,70 0 0 1 35.476595,-92.419731 20,20 45 0 1 26.40562,10.136171 z"
+         inkscape:label="spinner" />
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="frame_30"
+       inkscape:label="frame_30">
+      <path
+         id="spinner_30"
+         style="fill:#18a7db"
+         d="m 169.1673,106.93427 a 20,20 45 0 1 -15.4047,23.72117 30,30 0 0 0 -23.10711,35.58182 20,20 45 0 1 -15.40468,23.72118 A 20,20 45 0 1 91.529645,174.5537 70,70 0 0 1 145.44613,91.529561 20,20 45 0 1 169.1673,106.93427 Z"
+         inkscape:label="spinner" />
+    </g>
+  </g>
+</svg>
