@@ -734,13 +734,20 @@ async def main():
             cursor,
             png_out_dir="pngs",
             cur_out_dir="cursors",
-            resolutions=(32, 48, 64, 96, 128)
+            resolutions=(32, 48, 64)
         )
         coroutines.append(generator.generate())
 
-    MAX_CONCURRENT_TASKS = 8
+
+    # Inkscape crashes if it is run too many times in parallel
+    MAX_CONCURRENT_TASKS = 5
     for i in range(0, len(coroutines), MAX_CONCURRENT_TASKS):
         await asyncio.gather(*coroutines[i:i + MAX_CONCURRENT_TASKS])
+
+    # Copy other files
+    shutil.copy("templates/scripts/install.inf", "cursors/install.inf")
+    shutil.copy("templates/scripts/uninstall.cmd", "cursors/uninstall.cmd")
+    shutil.copy("LICENSE.txt", "cursors/LICENSE.txt")
 
 
 if __name__ == "__main__":
