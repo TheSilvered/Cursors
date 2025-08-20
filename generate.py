@@ -589,6 +589,8 @@ class CursorGenerator:
     def __gen_cur(self):
         print(f"Generating {self.cur_file}...")
 
+        os.makedirs(self.cur_out_dir, exist_ok=True)
+
         images = []
         for res in self.resolutions:
             img_path = os.path.join(self.png_out_dir, f"{res}.png")
@@ -732,7 +734,7 @@ async def main():
             cursor,
             png_out_dir="pngs",
             cur_out_dir="cursors",
-            resolutions=(32, 48, 64)
+            resolutions=(32, 48, 64, 96, 128)
         )
         coroutines.append(generator.generate())
 
