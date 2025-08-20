@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="320"
+   height="320"
+   viewBox="0 0 320 320"
+   version="1.1"
+   id="base"
+   sodipodi:docname="zoomout.svg"
+   inkscape:version="1.4.2 (f4327f4, 2025-05-13)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#808080"
+     bordercolor="#000000"
+     borderopacity="0"
+     inkscape:showpageshadow="false"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#323232"
+     showborder="false"
+     borderlayer="false"
+     showgrid="true"
+     inkscape:zoom="2.521875"
+     inkscape:cx="160"
+     inkscape:cy="160"
+     inkscape:window-width="1920"
+     inkscape:window-height="1009"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="body_layer">
+    <inkscape:grid
+       id="pixel_grid"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="10"
+       spacingy="10"
+       empcolor="#0000ff"
+       empopacity="0.30196078"
+       color="#0000ff"
+       opacity="0.14901961"
+       empspacing="4"
+       enabled="true"
+       visible="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect2"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,0,0,1,0,0,0,1 @ F,0,0,1,0,0,0,1 @ F,0,0,1,0,10,0,1 @ F,0,1,1,0,10,0,1"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="1"
+       flexible="false"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter1"
+       x="-0.25637419"
+       y="-0.2563742"
+       width="1.5123789"
+       height="1.55354">
+      <feFlood
+         result="flood"
+         in="SourceGraphic"
+         flood-opacity="0.301961"
+         flood-color="rgb(0,0,0)"
+         id="feFlood1" />
+      <feGaussianBlur
+         result="blur"
+         in="SourceGraphic"
+         stdDeviation="14.000000"
+         id="feGaussianBlur1" />
+      <feOffset
+         result="offset"
+         in="blur"
+         dx="0.000000"
+         dy="7.000000"
+         id="feOffset1" />
+      <feComposite
+         result="comp1"
+         operator="in"
+         in="flood"
+         in2="offset"
+         id="feComposite1" />
+      <feComposite
+         result="comp2"
+         operator="over"
+         in="SourceGraphic"
+         in2="comp1"
+         id="feComposite2" />
+    </filter>
+  </defs>
+  <rect
+     style="display:none"
+     id="hotspot"
+     width="10"
+     height="10"
+     x="125"
+     y="105" />
+  <g
+     inkscape:groupmode="layer"
+     id="body_layer"
+     inkscape:label="body_layer">
+    <path
+       id="frame"
+       style="stroke:#ffffff;stroke-width:20;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1;paint-order:markers stroke fill;filter:url(#filter1)"
+       d="M 130,50.000002 A 60,60 0 0 0 69.999998,110 60,60 0 0 0 130,170 60,60 0 0 0 164.76172,158.90429 l 58.23047,58.23047 a 10,10 0 0 0 14.14258,0 10,10 0 0 0 0,-14.14257 L 178.9043,144.76173 A 60,60 0 0 0 190,110 60,60 0 0 0 130,50.000002 Z"
+       inkscape:label="frame" />
+    <circle
+       style="fill:#ffffff"
+       id="lens"
+       cx="130"
+       cy="110"
+       r="50"
+       inkscape:label="lens" />
+    <rect
+       style="fill:#000000"
+       id="minus"
+       width="60"
+       height="20"
+       x="100"
+       y="100"
+       inkscape:label="minus"
+       ry="10" />
+  </g>
+</svg>
