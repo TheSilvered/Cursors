@@ -120,6 +120,7 @@ Each image is an 'icon' block
 
 import asyncio
 from dataclasses import dataclass
+from enum import Enum, auto
 from io import BytesIO
 import os
 import os.path
@@ -367,6 +368,12 @@ class CursorGenerator:
     Needs Inkscape. The name of the cursor is taken from the source file.
     The intermediate PNGs are store in 'png_out_dir'.
     """
+
+    class Result(Enum):
+        SUCCESS = auto()
+        FAILED = auto()
+        INKSCAPE_BUG = auto()
+
     def __init__(self, src: Cursor, png_out_dir: str, cur_out_dir: str, resolutions: Collection[int] = (32, 48, 64)):
         self.src = src
         self.png_out_dir = os.path.join(png_out_dir, self.src.name)
@@ -377,6 +384,12 @@ class CursorGenerator:
             self.cur_file = os.path.join(self.cur_out_dir, f"{self.src.name}.cur")
 
         self.resolutions = resolutions
+
+    def __is_inkscape_bug(self, s: str) -> Result:
+        if s.strip() == "terminate called after throwing an instance of 'Gio::DBus::Error'":
+            return self.Result.INKSCAPE_BUG
+        else:
+            return self.Result.FAILED
 
     async def __gen_ani_pngs(self) -> bool:
         assert self.src.ani_cfg is not None
@@ -425,7 +438,7 @@ class CursorGenerator:
                 ])
 
         if len(out_files) == 0:
-            return True
+            return self.Result.SUCCESS
 
         print(f"Generating {', '.join(out_files)}...")
 
@@ -446,9 +459,9 @@ class CursorGenerator:
                 print(gray("stderr: " + stderr_str))
             if stdout_str:
                 print(gray("stdout: " + stdout_str))
-            return False
+            return self.__is_inkscape_bug(stderr_str)
 
-        return True
+        return self.Result.SUCCESS
 
     async def __gen_pngs(self) -> bool:
         os.makedirs(self.png_out_dir, exist_ok=True)
@@ -468,7 +481,7 @@ class CursorGenerator:
             out_files.append(out_file)
 
         if len(out_files) == 0:
-            return True
+            return self.Result.SUCCESS
 
         print(f"Generating {', '.join(out_files)}...")
 
@@ -483,11 +496,15 @@ class CursorGenerator:
 
         if process.returncode != 0 or not all(map(os.path.exists, out_files)):
             print(red(f"Generation of {', '.join(out_files)} failed"))
-            print(gray("stderr: " + stderr.decode().strip()))
-            print(gray("stdout: " + stdout.decode().strip()))
-            return False
+            stderr_str = stderr.decode().strip()
+            stdout_str = stdout.decode().strip()
+            if stderr_str:
+                print(gray("stderr: " + stderr_str))
+            if stdout_str:
+                print(gray("stdout: " + stdout_str))
+            return self.__is_inkscape_bug(stderr_str)
 
-        return True
+        return self.Result.SUCCESS
 
     def __gen_ico_bytes(self, images: list[Image.Image]) -> bytes:
         assert len(images) == len(self.resolutions)
@@ -705,18 +722,23 @@ class CursorGenerator:
         with open(self.cur_file, "wb") as cur:
             cur.write(riff_block)
 
-    async def generate(self):
+    async def generate(self) -> Result:
         src_file_mtime = os.path.getmtime(self.src.path)
         # Only generate the file if the SVG is newer than the CUR
         if os.path.exists(self.cur_file) and os.path.getmtime(self.cur_file) > src_file_mtime:
-            return
+            return self.Result.SUCCESS
 
         if self.src.is_ani():
-            if await self.__gen_ani_pngs():
-                self.__gen_ani()
+            result = await self.__gen_ani_pngs()
+            if result != self.Result.SUCCESS:
+                return result
+            self.__gen_ani()
         else:
-            if await self.__gen_pngs():
-                self.__gen_cur()
+            result = await self.__gen_pngs()
+            if result != self.Result.SUCCESS:
+                return result
+            self.__gen_cur()
+        return self.Result.SUCCESS
 
 
 async def main():
@@ -736,13 +758,21 @@ async def main():
             cur_out_dir="cursors",
             resolutions=(32, 48, 64)
         )
-        coroutines.append(generator.generate())
+        coroutines.append(generator.generate)
 
 
     # Inkscape crashes if it is run too many times in parallel
-    MAX_CONCURRENT_TASKS = 5
-    for i in range(0, len(coroutines), MAX_CONCURRENT_TASKS):
-        await asyncio.gather(*coroutines[i:i + MAX_CONCURRENT_TASKS])
+    max_concurrent_tasks = 5
+    i = 0
+    while i < len(coroutines):
+        gather_coroutines = coroutines[i:i + max_concurrent_tasks]
+        results = await asyncio.gather(*(c() for c in gather_coroutines))
+        success_count = sum(list(map(lambda x: x == CursorGenerator.Result.SUCCESS, results)))
+        max_concurrent_tasks = success_count
+        i += success_count
+
+        # Re-run failed images
+        coroutines.extend([c for c, r in zip(gather_coroutines, results) if r == CursorGenerator.Result.INKSCAPE_BUG])
 
     # Copy other files
     shutil.copy("templates/scripts/install.inf", "cursors/install.inf")
